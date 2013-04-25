@@ -34,11 +34,6 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # GET /transactions/1/edit
-  def edit
-    @transaction = Transaction.find(params[:id])
-  end
-
   # POST /transactions
   # POST /transactions.json
   def create
@@ -66,22 +61,6 @@ class TransactionsController < ApplicationController
         render action: "new"
       end
     # end
-  end
-
-  # PUT /transactions/1
-  # PUT /transactions/1.json
-  def update
-    @transaction = Transaction.find(params[:id])
-
-    respond_to do |format|
-      if @transaction.update_attributes(params[:transaction])
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /transactions/1

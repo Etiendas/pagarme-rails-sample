@@ -1,0 +1,88 @@
+<script>
+  $(document).ready(function() {
+	PagarMe.encryption_key = "9741a03ea3a4f15f6fa8d9fe9d2c47c8";
+
+	var form = $("#payment_form");
+
+	form.submit(function(event) {
+	  var creditCard = new PagarMe.creditCard();
+	  creditCard.fillFromFrom(form);
+
+	  var fieldErrors = creditCard.fieldErrors();
+
+	  var hasErrors = false;
+	  for(var field in fieldErrors) { hasErrors = true; break; }
+
+	  $("#payment_form #card_number").css('border', '3px solid green');
+	  $("#payment_form #card_holder_name").css('border', '3px solid green');
+	  $("#payment_form #card_expiracy_month").css('border', '3px solid green');
+	  $("#payment_form #card_expiracy_year").css('border', '3px solid green');
+	  $("#payment_form #card_cvv").css('border', '3px solid green');
+
+	  if(hasErrors) {
+		for(var fieldName in fieldErrors) {
+		  var field = $(form.find("#" + fieldName)[0]);
+		  field.css('border', '3px solid red');
+		}
+
+		return false;
+	  }
+
+	  creditCard.generateHash(function(cardHash) {
+		console.log("GOT CARD HASH");
+		form.append($('<input type="hidden" name="card_hash"/>').val(cardHash));
+		form.get(0).submit();
+	  });
+
+	  return false;
+	});
+  });
+</script>
+
+<p id="error"><%= notice %></p>
+
+<%= form_for(@transaction, :html => { :id => "payment_form" }) do |f| %>
+  <% if @transaction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+
+      <ul>
+      <% @transaction.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    Email do usuário:<br />
+    <%= f.text_field :user_email %>
+  </div>
+  <div class="field">
+    Valor:<br />
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    Número do cartão:<br />
+	<%= text_field_tag :card_number, nil, { :id => "card_number" } %>
+  </div>
+  <div class="field">
+    Nome (como escrito no cartão):<br />
+	<%= text_field_tag :card_holder_name, nil, { :id => "card_holder_name" } %>
+  </div>
+  <div class="field">
+    Mês de expiração:<br />
+	<%= text_field_tag :card_expiracy_month, nil, { :id => "card_expiracy_month" } %>
+  </div>
+  <div class="field">
+    Ano de expiração:<br />
+	<%= text_field_tag :card_expiracy_year, nil, { :id => "card_expiracy_year" } %>
+  </div>
+  <div class="field">
+    Código de segurança:<br />
+	<%= text_field_tag :card_cvv, nil, { :id => "card_cvv" } %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User email:</b>
+  <%= @transaction.user_email %>
+</p>
+
+<p>
+  <b>Transaction:</b>
+  <%= @transaction.transaction_id %>
+</p>
+
+<p>
+  <b>Success:</b>
+  <%= @transaction.success %>
+</p>
+
+
+<%= link_to 'Back', transactions_path %>

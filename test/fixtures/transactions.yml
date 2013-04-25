@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_email: MyString
+  transaction_id: 1
+  success: false
+
+two:
+  user_email: MyString
+  transaction_id: 1
+  success: false
